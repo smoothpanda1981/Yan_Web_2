@@ -1,4 +1,4 @@
-package com.yan.wang.googlesheet;
+package com.yan.wang.template;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class GoogleSheetController {
+public class TemplateController {
 
     @Autowired
-    private GoogleSheetService googleSheetService;
+    private TemplateService templateService;
 
-    @GetMapping("/googlesheet")
+    @GetMapping("/template")
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView getGoogleSheetContent() {
         System.out.println("1");
-        String content = googleSheetService.getGoogleSheetContent();
-        ModelAndView modelAndView = new ModelAndView("googlesheet/gs");
+        String content = templateService.getTemplateContent();
+        ModelAndView modelAndView = new ModelAndView("template/tp");
         modelAndView.addObject("content", content);
         return modelAndView;
     }

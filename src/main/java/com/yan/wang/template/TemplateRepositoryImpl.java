@@ -1,4 +1,4 @@
-package com.yan.wang.googlesheet;
+package com.yan.wang.template;
 
 import com.yan.wang.findata.BuySellBtcUsd;
 import org.springframework.stereotype.Repository;
@@ -10,21 +10,20 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
-public class GoogleSheetRepositoryImpl implements GoogleSheetRepository {
+public class TemplateRepositoryImpl implements TemplateRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     @Transactional
-    public String getGoogleSheetContent() {
+    public String getTemplateContent() {
         System.out.println("3");
         System.out.println("3AAA");
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         System.out.println("3a");
-        List<BuySellBtcUsd> buySellBtcUsdList = entityManager.createQuery("Select a From BuySellBtcUsd a", BuySellBtcUsd.class).getResultList();
-        System.out.println("size : " + buySellBtcUsdList.size());
+//        List<BuySellBtcUsd> buySellBtcUsdList = entityManager.createQuery("Select a From BuySellBtcUsd a", BuySellBtcUsd.class).getResultList();
         System.out.println("4");
-        return "";
+        return "Hello Template";
     }
 }
