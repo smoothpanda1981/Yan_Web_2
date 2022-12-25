@@ -292,6 +292,8 @@ public class BitstampController {
 
             int sortedUserTransactionListSize = sortedUserTransactionList.size();
             int sortedUserTransactionBoughtListSize = sortedUserTransactionBoughtList.size();
+            System.out.println("sortedUserTransactionListSize : " + sortedUserTransactionListSize);
+            System.out.println("sortedUserTransactionBoughtListSize : " + sortedUserTransactionBoughtListSize);
             if (sortedUserTransactionListSize > sortedUserTransactionBoughtListSize) {
                 modelAndView.addObject("sortedUserTransactionSoldList", sortedUserTransactionList.subList(0, sortedUserTransactionBoughtListSize));
                 modelAndView.addObject("sortedUserTransactionBoughtList", sortedUserTransactionBoughtList);
@@ -710,7 +712,8 @@ public class BitstampController {
         String nonce = UUID.randomUUID().toString();
         String contentType = "application/x-www-form-urlencoded";
         String version = "v2";
-        String payloadString = "offset=0;limit=1000";
+        //String payloadString = "offset=0;limit=1000";
+        String payloadString = "offset=1";
         String signature = apiKey +
                 httpVerb +
                 urlHost +
@@ -832,7 +835,7 @@ public class BitstampController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("balance :" + response.body());
+        System.out.println("balance : " + response.body());
         return response.body();
     }
 

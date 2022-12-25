@@ -14,15 +14,15 @@
                 <table id="dtBasicExample1" class="table table-dark table-striped table-hover table-borderless">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
                         <th scope="col">Portfolio</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Value</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="balanceList : ${cashFlowMainPortfolio}">
-                        <td th:text="${balanceList.name}"></td>
                         <td th:text="${balanceList.portfolioName}"></td>
+                        <td th:text="${balanceList.name}"></td>
                         <td th:text="${balanceList.value}"></td>
                     </tr>
                     </tbody>
