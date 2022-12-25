@@ -7,7 +7,45 @@
     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
     <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
-    <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+    <script src="../../../resources/js/iconify.min.js" th:src="@{/resources/js/iconify.min.js}"></script>
+    <script src="../../../resources/js/canvasjs.min.js" th:src="@{/resources/js/canvasjs.min.js}"></script>
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                exportEnabled: true,
+                animationEnabled: true,
+                title:{
+                    text: "[[${pieChartTitle}]]"
+                },
+                legend:{
+                    cursor: "pointer",
+                    itemclick: explodePie
+                },
+                data: [{
+                    type: "[[${pie}]]",
+                    showInLegend: true,
+                    toolTipContent: "{name}: <strong>{y}%</strong>",
+                    indexLabel: "{name} - {y}%",
+                    dataPoints: [(${pieChartToUseInJavaScript})]
+                    /* Expressions between [[...]] or [(...)] are considered inlined expressions in Thymeleaf,
+                    and inside them we can use any kind of expression that would also
+                    be valid in a th:text or th:utext attribute. */
+                }]
+        });
+chart.render();
+}
+
+function explodePie (e) {
+if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+    e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+} else {
+    e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+}
+e.chart.render();
+
+}
+</script>
 </head>
 <body>
 <div th:replace="fragments/layout :: header"></div>

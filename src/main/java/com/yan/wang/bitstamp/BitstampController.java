@@ -112,6 +112,15 @@ public class BitstampController {
                     cryptocurrenciesList.add(balance5);
                 }
             }
+            System.out.println("size of cryptocurrenciesList : " + cryptocurrenciesList);
+
+            List<CryptoPieSlice> cryptoPieSliceList = computePieChart(cryptocurrenciesList);
+            System.out.println("size of cryptoPieSliceList : " + cryptoPieSliceList);
+            double totalSumOfAllCryptoForPieChart = computeTotalSumOfAllCryptoForPieChart(cryptoPieSliceList);
+            System.out.println("totalSumOfAllCryptoForPieChart : " + totalSumOfAllCryptoForPieChart);
+            List<CryptoPieSlice> newCryptoPieSliceList = addTotalAndComputePercentage(cryptoPieSliceList, totalSumOfAllCryptoForPieChart);
+            System.out.println("size of newCryptoPieSliceList : " + newCryptoPieSliceList);
+            String pieChartToUseInJavaScript = compileStringToPutIntoPieChartViaJavascript(newCryptoPieSliceList);
 
             List<UserTransaction> userTransactionList = new ArrayList<UserTransaction>();
             List<UserTransaction> userTransactionBoughtList = new ArrayList<UserTransaction>();
@@ -287,6 +296,9 @@ public class BitstampController {
 
             ModelAndView modelAndView = new ModelAndView("bitstamp/bitstamp");
             modelAndView.addObject("crytocurrenciesList", cryptocurrenciesList);
+            modelAndView.addObject("pieChartToUseInJavaScript", pieChartToUseInJavaScript);
+            modelAndView.addObject("pie", "pie");
+            modelAndView.addObject("pieChartTitle", "Cryptocurrencies pie chart distribution");
             modelAndView.addObject("cashFlowMainPortfolio", cashFlowMainPortfolio);
             modelAndView.addObject("cashFlowProfitsPortfolio", cashFlowProfitsPortfolio);
 
@@ -1292,7 +1304,66 @@ public class BitstampController {
         return balanceList4;
     }
 
-    public SuperThreeLists getSuperThreeLists(List<Balance> balanceList4) {
-        return null;
+    public List<CryptoPieSlice> computePieChart(List<Balance> cryptocurrenciesList) {
+        List<CryptoPieSlice>  cryptoPieSliceList = new ArrayList<CryptoPieSlice>();
+
+        for (Balance balance : cryptocurrenciesList) {
+            double value = Double.parseDouble(balance.getValue());
+            double currentPrice = Double.parseDouble(balance.getCurrentPrice());
+            double amountDouble = value * currentPrice;
+            DecimalFormat df = new DecimalFormat("0.00");
+            String amount = df.format(amountDouble);
+            CryptoPieSlice cryptoPieSlice = new CryptoPieSlice();
+            cryptoPieSlice.setQuantity(balance.getValue());
+            cryptoPieSlice.setCurrentPrice(balance.getCurrentPrice());
+            cryptoPieSlice.setAmount(Double.parseDouble(amount));
+            cryptoPieSlice.setName(balance.getName().replace("_balance", ""));
+            cryptoPieSliceList.add(cryptoPieSlice);
+        }
+        return cryptoPieSliceList;
+    }
+
+    public double computeTotalSumOfAllCryptoForPieChart(List<CryptoPieSlice> cryptoPieSlicesList) {
+        double totalSumOfAllCryptoForPieChart = 0.00;
+        for (CryptoPieSlice cryptoPieSlice : cryptoPieSlicesList) {
+            totalSumOfAllCryptoForPieChart = totalSumOfAllCryptoForPieChart + cryptoPieSlice.getAmount();
+        }
+        return totalSumOfAllCryptoForPieChart;
+    }
+
+    public List<CryptoPieSlice> addTotalAndComputePercentage(List<CryptoPieSlice> cryptoPieSliceList, double totalSumOfAllCryptoForPieChart) {
+        List<CryptoPieSlice>  newCryptoPieSliceList = new ArrayList<CryptoPieSlice>();
+        for (CryptoPieSlice cryptoPieSlice : cryptoPieSliceList) {
+            CryptoPieSlice newCrytoPieClice = new CryptoPieSlice();
+            newCrytoPieClice.setQuantity(cryptoPieSlice.getQuantity());
+            newCrytoPieClice.setCurrentPrice(cryptoPieSlice.getCurrentPrice());
+            newCrytoPieClice.setAmount(cryptoPieSlice.getAmount());
+            newCrytoPieClice.setName(cryptoPieSlice.getName());
+            newCrytoPieClice.setTotal(totalSumOfAllCryptoForPieChart);
+
+            double percentageDouble = cryptoPieSlice.getAmount() / totalSumOfAllCryptoForPieChart * 100;
+            DecimalFormat df = new DecimalFormat("0.00");
+            String percentageString = df.format(percentageDouble);
+            newCrytoPieClice.setPercentage(Double.parseDouble(percentageString));
+            newCryptoPieSliceList.add(newCrytoPieClice);
+        }
+        return newCryptoPieSliceList;
+    }
+
+    public String compileStringToPutIntoPieChartViaJavascript(List<CryptoPieSlice> cryptoPieSliceList) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        int pointer = 0;
+        for (CryptoPieSlice cryptoPieSlice : cryptoPieSliceList) {
+            if (pointer == 0) {
+                pointer++;
+                sb.append("{ y: " + cryptoPieSlice.getPercentage() + ", name: \"" + cryptoPieSlice.getName() + "\" }");
+            } else {
+                sb.append(",{ y: " + cryptoPieSlice.getPercentage() + ", name: \"" + cryptoPieSlice.getName() + "\" }");
+            }
+        }
+        sb.append("]");
+        System.out.println("StringBuffer : " + sb.toString());
+        return sb.toString();
     }
 }
