@@ -298,7 +298,7 @@ public class BitstampController {
             modelAndView.addObject("crytocurrenciesList", cryptocurrenciesList);
             modelAndView.addObject("pieChartToUseInJavaScript", pieChartToUseInJavaScript);
             modelAndView.addObject("pie", "pie");
-            modelAndView.addObject("pieChartTitle", "Cryptocurrencies pie chart distribution");
+            modelAndView.addObject("pieChartTitle", "Pie chart distribution");
             modelAndView.addObject("cashFlowMainPortfolio", cashFlowMainPortfolio);
             modelAndView.addObject("cashFlowProfitsPortfolio", cashFlowProfitsPortfolio);
 
