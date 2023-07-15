@@ -112,14 +112,14 @@ public class BitstampController {
                     cryptocurrenciesList.add(balance5);
                 }
             }
-            System.out.println("size of cryptocurrenciesList : " + cryptocurrenciesList);
+            System.out.println("size of cryptocurrenciesList : " + cryptocurrenciesList.size());
 
             List<CryptoPieSlice> cryptoPieSliceList = computePieChart(cryptocurrenciesList);
-            System.out.println("size of cryptoPieSliceList : " + cryptoPieSliceList);
+            System.out.println("size of cryptoPieSliceList : " + cryptoPieSliceList.size());
             double totalSumOfAllCryptoForPieChart = computeTotalSumOfAllCryptoForPieChart(cryptoPieSliceList);
             System.out.println("totalSumOfAllCryptoForPieChart : " + totalSumOfAllCryptoForPieChart);
             List<CryptoPieSlice> newCryptoPieSliceList = addTotalAndComputePercentage(cryptoPieSliceList, totalSumOfAllCryptoForPieChart);
-            System.out.println("size of newCryptoPieSliceList : " + newCryptoPieSliceList);
+            System.out.println("size of newCryptoPieSliceList : " + newCryptoPieSliceList.size());
             String pieChartToUseInJavaScript = compileStringToPutIntoPieChartViaJavascript(newCryptoPieSliceList);
 
             List<UserTransaction> userTransactionList = new ArrayList<UserTransaction>();
@@ -927,6 +927,7 @@ public class BitstampController {
 
         // This line makes the request
         InputStream responseStream = connection.getInputStream();
+        System.out.println("getTicket - " + composeUrl + " : " + responseStream.toString());
 
         // Manually converting the response body InputStream to CurrentPrice using Jackson
         ObjectMapper mapper = new ObjectMapper();

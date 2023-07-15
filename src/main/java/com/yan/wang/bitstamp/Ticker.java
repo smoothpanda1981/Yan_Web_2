@@ -13,6 +13,7 @@ public class Ticker {
 	public String open;
 	public String percent_change_24;
 	public String open_24;
+	public String side;
 
 	public String getHigh() {
 		return high;
@@ -100,5 +101,13 @@ public class Ticker {
 
 	public void setOpen_24(String open_24) {
 		this.open_24 = open_24;
+	}
+
+	public String getSide() {
+		return side;
+	}
+
+	public void setSide(String side) {
+		this.side = side;
 	}
 }
