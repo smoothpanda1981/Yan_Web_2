@@ -69,6 +69,19 @@
                 </td>
             </form>
         </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total P/L</td>
+            <td th:switch="${totalPLColor}">
+                <span th:case="'black'" th:text="${totalPLValue}"></span>
+                <span th:case="'red'" th:style="'color:red'" th:text="${totalPLValue}"></span>
+                <span th:case="'green'" th:style="'color:green'" th:text="${totalPLValue}"></span>
+            </td>
+        </tr>
         </tbody>
     </table>
     <div id="chartContainer" style="height: 450px; width: 100%;"></div>

@@ -122,13 +122,13 @@ public class BitstampController {
             System.out.println("size of newCryptoPieSliceList : " + newCryptoPieSliceList.size());
             String pieChartToUseInJavaScript = compileStringToPutIntoPieChartViaJavascript(newCryptoPieSliceList);
 
+
             List<UserTransaction> userTransactionList = new ArrayList<UserTransaction>();
             List<UserTransaction> userTransactionBoughtList = new ArrayList<UserTransaction>();
             String resultTemp = getUserTransactions(props).replace(" ", "");
             String resultSub = resultTemp.substring(2, resultTemp.length()-2);
             String[] resultSubTab = resultSub.split("\\},\\{");
             for (int i = 0; i < resultSubTab.length; i++) {
-                System.out.println("resultSubTab[" + i + "] :" + resultSubTab[i]);
                 if (resultSubTab[i].contains("\"type\":\"2\"")
                         && resultSubTab[i].contains("\"order_id\"")
                         && resultSubTab[i].contains("\"fee\"")
@@ -136,6 +136,7 @@ public class BitstampController {
                         && !resultSubTab[i].contains("\"bch\"")
                         && !resultSubTab[i].contains("_eur\"")
                         && !resultSubTab[i].contains("_btc\"")) {
+                    System.out.println("included => resultSubTab[" + i + "] :" + resultSubTab[i]);
                     String[] oneRowTab = resultSubTab[i].split(",");
                     boolean show = false;
                     for (int j = 0; j < oneRowTab.length; j++) {
@@ -293,9 +294,26 @@ public class BitstampController {
             List<BalanceForIA> balanceForIAList = copyBalanceListIntoBalanceForIAList(cryptocurrenciesList);
             bitstampService.saveBalanceListInIA(balanceForIAList);
 
+            Double totalPLValue = 0.00;
+            DecimalFormat df = new DecimalFormat("0.00");
+            for (Balance balance : cryptocurrenciesList) {
+                totalPLValue = totalPLValue + Double.parseDouble(balance.getProfitOrLossValue());
+            }
+
+            String totalPLColor = "";
+            if (totalPLValue > 0.00) {
+                totalPLColor = "green";
+            } else if (totalPLValue == 0.00) {
+                totalPLColor = "black";
+            } else {
+                totalPLColor = "red";
+            }
+
 
             ModelAndView modelAndView = new ModelAndView("bitstamp/bitstamp");
             modelAndView.addObject("crytocurrenciesList", cryptocurrenciesList);
+            modelAndView.addObject("totalPLValue", String.valueOf(df.format(totalPLValue)));
+            modelAndView.addObject("totalPLColor", String.valueOf(totalPLColor));
             modelAndView.addObject("pieChartToUseInJavaScript", pieChartToUseInJavaScript);
             modelAndView.addObject("pieType", "pie");
             modelAndView.addObject("pieChartTitle", "Pie chart distribution");
